@@ -1,5 +1,6 @@
 package entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,6 +27,7 @@ public class Elf implements Serializable {
   private PowerType powerType;
 
   @ManyToOne(optional = false)
+  @JsonIgnore
   private Forest forest;
 
   public Elf(String name, int arrows, BowType bowType, PowerType powerType, Forest forest) {
