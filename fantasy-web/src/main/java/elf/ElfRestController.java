@@ -6,11 +6,10 @@ import repos.ElfRepository;
 import repos.ForestRepository;
 
 import javax.ejb.EJB;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Optional;
 
 @Path("/elves")
@@ -34,5 +33,23 @@ public class ElfRestController {
     Elf elf = new Elf(input.getName(), input.getArrows(), input.getBowType(), input.getPowerType(), maybeForest.get());
     elfRepository.save(elf);
     return Response.status(201).build();
+  }
+
+  @GET
+  public Response getAll() {
+    List<Elf> elves = elfRepository.getAll();
+    return Response.ok(elves, MediaType.APPLICATION_JSON).build();
+  }
+
+  @GET
+  @Path("/{id}")
+  public Response getById(@PathParam("id") int id) {
+    Optional<Elf> maybeElf = Optional.ofNullable(elfRepository.getById(id));
+
+    if (maybeElf.isPresent()) {
+      return Response.ok(maybeElf.get(), MediaType.APPLICATION_JSON).build();
+    } else {
+      return Response.status(404).build();
+    }
   }
 }
