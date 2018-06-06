@@ -1,6 +1,7 @@
 package elf;
 
 import entities.BowType;
+import entities.Elf;
 import entities.PowerType;
 import lombok.Data;
 
@@ -12,4 +13,5 @@ public class ElfInput {
   private BowType bowType;
   private PowerType powerType;
   private int forestId;
+
 }

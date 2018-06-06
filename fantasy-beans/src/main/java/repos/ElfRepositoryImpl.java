@@ -35,4 +35,15 @@ public class ElfRepositoryImpl implements ElfRepository {
       .findFirst()
       .orElse(null);
   }
+
+  @Override
+  public void removeById(int id) {
+    Elf elf = getById(id);
+    entityManager.remove(elf);
+  }
+
+  @Override
+  public void update(Elf elf) {
+    entityManager.merge(elf);
+  }
 }

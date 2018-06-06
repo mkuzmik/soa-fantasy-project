@@ -52,4 +52,28 @@ public class ElfRestController {
       return Response.status(404).build();
     }
   }
+
+  @PUT
+  @Path("/{id}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response update(@PathParam("id") int id, ElfInput input) {
+    Elf toUpdate = elfRepository.getById(id);
+    Forest newForest = forestRepository.getById(input.getForestId());
+
+    toUpdate.setName(input.getName());
+    toUpdate.setArrows(input.getArrows());
+    toUpdate.setBowType(input.getBowType());
+    toUpdate.setPowerType(input.getPowerType());
+    toUpdate.setForest(newForest);
+
+    elfRepository.update(toUpdate);
+    return Response.ok().build();
+  }
+
+  @DELETE
+  @Path("/{id}")
+  public Response delete(@PathParam("id") int id) {
+    elfRepository.removeById(id);
+    return Response.ok().build();
+  }
 }

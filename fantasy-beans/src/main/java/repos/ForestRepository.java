@@ -12,4 +12,8 @@ public interface ForestRepository {
   List<Forest> getAll();
 
   Forest getById(int id);
+
+  void removeById(int id);
+
+  void update(Forest forest);
 }

@@ -1,5 +1,6 @@
 package entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.util.Collection;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Forest implements Serializable {
 
   @Id

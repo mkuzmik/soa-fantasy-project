@@ -35,4 +35,15 @@ public class ForestRepositoryImpl implements ForestRepository{
       .findFirst()
       .orElse(null);
   }
+
+  @Override
+  public void removeById(int id) {
+    Forest forest = getById(id);
+    entityManager.remove(forest);
+  }
+
+  @Override
+  public void update(Forest forest) {
+    entityManager.merge(forest);
+  }
 }

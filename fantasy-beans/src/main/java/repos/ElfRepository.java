@@ -11,4 +11,8 @@ public interface ElfRepository {
   List<Elf> getAll();
 
   Elf getById(int id);
+
+  void removeById(int id);
+
+  void update(Elf elf);
 }
