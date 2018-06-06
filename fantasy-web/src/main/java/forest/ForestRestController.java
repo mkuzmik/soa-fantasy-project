@@ -1,6 +1,8 @@
 package forest;
 
+import entities.Elf;
 import entities.Forest;
+import repos.ElfRepository;
 import repos.ForestRepository;
 
 import javax.ejb.EJB;
@@ -15,6 +17,9 @@ public class ForestRestController {
 
   @EJB
   private ForestRepository forestRepository;
+
+  @EJB
+  private ElfRepository elfRepository;
 
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
@@ -40,5 +45,27 @@ public class ForestRestController {
     } else {
       return Response.status(404).build();
     }
+  }
+
+  @PUT
+  @Path("/{id}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response update(@PathParam("id") int id, ForestInput input) {
+    Forest forest = forestRepository.getById(id);
+    forest.setName(input.getName());
+    forest.setTrees(input.getTrees());
+    forestRepository.update(forest);
+    return Response.status(200).build();
+  }
+
+  @DELETE
+  @Path("/{id}")
+  public Response delete(@PathParam("id") int id) {
+    Forest forest = forestRepository.getById(id);
+    forest.getElves().stream()
+      .map(Elf::getId)
+      .forEach(elfRepository::removeById);
+    forestRepository.removeById(id);
+    return Response.status(200).build();
   }
 }
