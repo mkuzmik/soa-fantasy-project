@@ -1,6 +1,6 @@
 package repos;
 
-import entities.Forest;
+import entities.Elf;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -9,26 +9,26 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Stateless
-@Remote(ForestRepository.class)
+@Remote(ElfRepository.class)
 @SuppressWarnings("unchecked")
-public class ForestRepositoryImpl implements ForestRepository{
+public class ElfRepositoryImpl implements ElfRepository {
 
   @PersistenceContext(unitName = "postgresDb")
   EntityManager entityManager;
 
   @Override
-  public void save(Forest forest) {
-    entityManager.persist(forest);
+  public void save(Elf elf) {
+    entityManager.persist(elf);
   }
 
   @Override
-  public List<Forest> getAll() {
-    return entityManager.createQuery("select a from Forest a").getResultList();
+  public List<Elf> getAll() {
+    return entityManager.createQuery("select a from Elf a").getResultList();
   }
 
   @Override
-  public Forest getById(int id) {
-    return (Forest) entityManager.createQuery("select a from Forest a where a.id = :id")
+  public Elf getById(int id) {
+    return (Elf) entityManager.createQuery("select a from Elf a where a.id = :id")
       .setParameter("id", id)
       .getResultList()
       .stream()

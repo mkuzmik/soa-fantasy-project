@@ -3,10 +3,9 @@ package entities;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 
 @Entity
 @Data
@@ -17,9 +16,15 @@ public class Forest implements Serializable {
   @GeneratedValue
   private int id;
 
-  private int treesAmount;
+  private String name;
 
-  public Forest(int treesAmount) {
-    this.treesAmount = treesAmount;
+  private int trees;
+
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "forest")
+  private Collection<Elf> elves;
+
+  public Forest(String name, int trees) {
+    this.name = name;
+    this.trees = trees;
   }
 }
