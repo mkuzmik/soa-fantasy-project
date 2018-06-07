@@ -61,10 +61,6 @@ public class ForestRestController {
   @DELETE
   @Path("/{id}")
   public Response delete(@PathParam("id") int id) {
-    Forest forest = forestRepository.getById(id);
-    forest.getElves().stream()
-      .map(Elf::getId)
-      .forEach(elfRepository::removeById);
     forestRepository.removeById(id);
     return Response.status(200).build();
   }

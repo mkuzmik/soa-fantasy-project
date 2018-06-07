@@ -1,5 +1,8 @@
 package entities;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +27,19 @@ public class Forest implements Serializable {
 
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "forest")
   private Collection<Elf> elves;
+
+  @ManyToOne(optional = false)
+  @JsonIgnore
+  private User user;
+
+  @Transient
+  @JsonInclude
+  private int userId;
+
+  @JsonGetter("userId")
+  private int getUserId() {
+    return user.getId();
+  }
 
   public Forest(String name, int trees) {
     this.name = name;

@@ -6,12 +6,13 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 @Stateless
 @Remote(ElfRepository.class)
 @SuppressWarnings("unchecked")
-public class ElfRepositoryImpl implements ElfRepository {
+public class ElfRepositoryBean implements ElfRepository {
 
   @PersistenceContext(unitName = "postgresDb")
   EntityManager entityManager;
@@ -28,7 +29,7 @@ public class ElfRepositoryImpl implements ElfRepository {
 
   @Override
   public Elf getById(int id) {
-    return (Elf) entityManager.createQuery("select a from Elf a where a.id = :id")
+    return (Elf) entityManager.createNamedQuery("findById")
       .setParameter("id", id)
       .getResultList()
       .stream()

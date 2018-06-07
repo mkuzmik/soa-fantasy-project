@@ -14,6 +14,10 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedQuery(
+  name="findById",
+  query="SELECT OBJECT(e) FROM Elf e WHERE e.id = :id"
+)
 public class Elf implements Serializable {
 
   @Id

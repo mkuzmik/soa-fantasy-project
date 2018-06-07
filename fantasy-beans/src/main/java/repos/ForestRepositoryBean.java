@@ -1,7 +1,9 @@
 package repos;
 
+import entities.Elf;
 import entities.Forest;
 
+import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -11,10 +13,13 @@ import java.util.List;
 @Stateless
 @Remote(ForestRepository.class)
 @SuppressWarnings("unchecked")
-public class ForestRepositoryImpl implements ForestRepository{
+public class ForestRepositoryBean implements ForestRepository{
 
   @PersistenceContext(unitName = "postgresDb")
   EntityManager entityManager;
+
+  @EJB
+  ElfRepository elfRepository;
 
   @Override
   public void save(Forest forest) {
@@ -39,6 +44,7 @@ public class ForestRepositoryImpl implements ForestRepository{
   @Override
   public void removeById(int id) {
     Forest forest = getById(id);
+    forest.getElves().stream().map(Elf::getId).forEach(elfRepository::removeById);
     entityManager.remove(forest);
   }
 
