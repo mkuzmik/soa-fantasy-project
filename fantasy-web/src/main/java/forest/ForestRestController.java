@@ -1,11 +1,13 @@
 package forest;
 
-import entities.Elf;
 import entities.Forest;
-import repos.ElfRepository;
+import entities.User;
 import repos.ForestRepository;
+import repos.UserRepository;
+import request.RequestContext;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -19,12 +21,16 @@ public class ForestRestController {
   private ForestRepository forestRepository;
 
   @EJB
-  private ElfRepository elfRepository;
+  private UserRepository userRepository;
+
+  @Inject
+  private RequestContext requestContext;
 
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   public Response create(ForestInput input) {
-    Forest forest = new Forest(input.getName(), input.getTrees());
+    User user = userRepository.getById(requestContext.getUserId());
+    Forest forest = new Forest(input.getName(), input.getTrees(), user);
     forestRepository.save(forest);
     return Response.status(201).build();
   }
@@ -54,14 +60,14 @@ public class ForestRestController {
     Forest forest = forestRepository.getById(id);
     forest.setName(input.getName());
     forest.setTrees(input.getTrees());
-    forestRepository.update(forest);
+    forestRepository.update(forest, requestContext.getUserId());
     return Response.status(200).build();
   }
 
   @DELETE
   @Path("/{id}")
   public Response delete(@PathParam("id") int id) {
-    forestRepository.removeById(id);
+    forestRepository.removeById(id, requestContext.getUserId());
     return Response.status(200).build();
   }
 }

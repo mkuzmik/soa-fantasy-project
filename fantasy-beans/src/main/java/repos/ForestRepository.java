@@ -13,7 +13,7 @@ public interface ForestRepository {
 
   Forest getById(int id);
 
-  void removeById(int id);
+  void removeById(int id, int fromUserId);
 
-  void update(Forest forest);
+  void update(Forest forest, int fromUserId);
 }

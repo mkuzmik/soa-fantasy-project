@@ -2,8 +2,11 @@ package repos;
 
 import entities.Elf;
 import entities.Forest;
+import entities.Role;
+import entities.User;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -16,10 +19,13 @@ import java.util.List;
 public class ForestRepositoryBean implements ForestRepository{
 
   @PersistenceContext(unitName = "postgresDb")
-  EntityManager entityManager;
+  private EntityManager entityManager;
 
   @EJB
-  ElfRepository elfRepository;
+  private ElfRepository elfRepository;
+
+  @EJB
+  private UserRepository userRepository;
 
   @Override
   public void save(Forest forest) {
@@ -42,14 +48,27 @@ public class ForestRepositoryBean implements ForestRepository{
   }
 
   @Override
-  public void removeById(int id) {
+  public void removeById(int id, int fromId) {
     Forest forest = getById(id);
-    forest.getElves().stream().map(Elf::getId).forEach(elfRepository::removeById);
+    User reguestFrom = userRepository.getById(fromId);
+
+    if (!reguestFrom.getRole().equals(Role.ADMIN) && !(fromId == forest.getUser().getId())) {
+      throw new EJBException("Not authorized to update this forest");
+    }
+
+    forest.getElves().stream().map(Elf::getId).forEach(e -> elfRepository.removeById(e, fromId));
     entityManager.remove(forest);
   }
 
   @Override
-  public void update(Forest forest) {
+  public void update(Forest forest, int fromId) {
+    Forest edited = getById(forest.getId());
+    User reguestFrom = userRepository.getById(fromId);
+
+    if (!reguestFrom.getRole().equals(Role.ADMIN) && !(fromId == edited.getUser().getId())) {
+      throw new EJBException("Not authorized to update this forest");
+    }
+
     entityManager.merge(forest);
   }
 }

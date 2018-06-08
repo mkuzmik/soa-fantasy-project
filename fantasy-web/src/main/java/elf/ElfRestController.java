@@ -4,8 +4,10 @@ import entities.Elf;
 import entities.Forest;
 import repos.ElfRepository;
 import repos.ForestRepository;
+import request.RequestContext;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,6 +23,9 @@ public class ElfRestController {
   @EJB
   private ForestRepository forestRepository;
 
+  @Inject
+  RequestContext requestContext;
+
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   public Response create(ElfInput input) {
@@ -31,7 +36,7 @@ public class ElfRestController {
     }
 
     Elf elf = new Elf(input.getName(), input.getArrows(), input.getBowType(), input.getPowerType(), maybeForest.get());
-    elfRepository.save(elf);
+    elfRepository.save(elf, requestContext.getUserId());
     return Response.status(201).build();
   }
 
@@ -66,14 +71,14 @@ public class ElfRestController {
     toUpdate.setPowerType(input.getPowerType());
     toUpdate.setForest(newForest);
 
-    elfRepository.update(toUpdate);
+    elfRepository.update(toUpdate, requestContext.getUserId());
     return Response.ok().build();
   }
 
   @DELETE
   @Path("/{id}")
   public Response delete(@PathParam("id") int id) {
-    elfRepository.removeById(id);
+    elfRepository.removeById(id, requestContext.getUserId());
     return Response.ok().build();
   }
 }

@@ -37,12 +37,13 @@ public class Forest implements Serializable {
   private int userId;
 
   @JsonGetter("userId")
-  private int getUserId() {
+  public int getUserId() {
     return user.getId();
   }
 
-  public Forest(String name, int trees) {
+  public Forest(String name, int trees, User user) {
     this.name = name;
     this.trees = trees;
+    this.user = user;
   }
 }
