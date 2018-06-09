@@ -66,4 +66,8 @@ public class JwtService {
   public void logout(int userId) {
     userIdToTokenId.remove(Integer.toString(userId));
   }
+
+  public void logoutAll() {
+    userIdToTokenId.clear();
+  }
 }

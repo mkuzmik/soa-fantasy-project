@@ -32,7 +32,8 @@ public class AuthFilter implements ContainerRequestFilter {
 
   private Request[] publicPaths = new Request[] {
     new Request("/auth/login", "POST"),
-    new Request("/users", "POST")
+    new Request("/users", "POST"),
+    new Request("/auth/logout/all", "GET")
   };
 
   @Override

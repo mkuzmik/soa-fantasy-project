@@ -7,10 +7,7 @@ import request.RequestContext;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 @Path("/auth")
@@ -27,10 +24,10 @@ public class AuthRestController {
 
   @POST
   @Path("/login")
-  public Response login(@FormParam("username") String username, @FormParam("password") String password) {
+  public Response login(LoginInput input) {
     // TODO md5 password
-    User user = userRepository.getByUsername(username);
-    if (user == null || !user.getPassword().equals(password)) {
+    User user = userRepository.getByUsername(input.getUsername());
+    if (user == null || !user.getPassword().equals(input.getPassword())) {
       throw new AuthorizationException("Username or password is incorrect");
     }
 
@@ -41,6 +38,14 @@ public class AuthRestController {
   @Path("/logout")
   public Response logout() {
     jwtService.logout(requestContext.getUserId());
+    return Response.ok().build();
+  }
+
+  @GET
+  @Path("/logout/all")
+  public Response logoutAll() {
+    jwtService.logoutAll();
+
     return Response.ok().build();
   }
 }
