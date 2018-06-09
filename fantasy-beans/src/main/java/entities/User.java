@@ -13,12 +13,17 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedQuery(
+  name="findByUsername",
+  query="SELECT OBJECT(e) FROM User e WHERE e.username = :username"
+)
 public class User implements Serializable {
 
   @Id
   @GeneratedValue
   private int id;
 
+  @Column(unique = true)
   private String username;
 
   private String password;

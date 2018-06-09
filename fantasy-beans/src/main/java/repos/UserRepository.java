@@ -12,6 +12,8 @@ public interface UserRepository {
 
   User getById(int id);
 
+  User getByUsername(String username);
+
   void removeById(int id, int requestFromUserId);
 
   void update(User user, int requestFromUserId);

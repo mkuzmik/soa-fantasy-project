@@ -39,6 +39,16 @@ public class UserRepositoryBean implements UserRepository {
   }
 
   @Override
+  public User getByUsername(String username) {
+    return (User) entityManager.createNamedQuery("findByUsername")
+      .setParameter("username", username)
+      .getResultList()
+      .stream()
+      .findFirst()
+      .orElse(null);
+  }
+
+  @Override
   public void removeById(int id, int requestFromUserId) {
     User reguestFrom = getById(requestFromUserId);
 
