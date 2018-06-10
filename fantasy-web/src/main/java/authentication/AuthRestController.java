@@ -4,11 +4,13 @@ import entities.User;
 import repos.UserRepository;
 import request.AuthorizationException;
 import request.RequestContext;
+import util.AuthUtil;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.security.MessageDigest;
 
 @Path("/auth")
 public class AuthRestController {
@@ -25,9 +27,9 @@ public class AuthRestController {
   @POST
   @Path("/login")
   public Response login(LoginInput input) {
-    // TODO md5 password
+
     User user = userRepository.getByUsername(input.getUsername());
-    if (user == null || !user.getPassword().equals(input.getPassword())) {
+    if (user == null || !user.getPassword().equals(AuthUtil.md5Encode(input.getPassword()))) {
       throw new AuthorizationException("Username or password is incorrect");
     }
 

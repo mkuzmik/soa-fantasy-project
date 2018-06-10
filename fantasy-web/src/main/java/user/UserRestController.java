@@ -5,8 +5,10 @@ import entities.User;
 import forest.ForestInput;
 import repos.ForestRepository;
 import repos.UserRepository;
+import request.RequestContext;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -19,8 +21,8 @@ public class UserRestController {
   @EJB
   private UserRepository userRepository;
 
-  @EJB
-  private ForestRepository forestRepository;
+  @Inject
+  private RequestContext requestContext;
 
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
@@ -55,9 +57,7 @@ public class UserRestController {
     User user = userRepository.getById(id);
     user.setUsername(input.getUsername());
     user.setPassword(input.getPassword());
-    user.setRole(input.getRole());
-    // TODO take fromId from request context
-    userRepository.update(user, user.getId());
+    userRepository.update(user, requestContext.getUserId());
     return Response.status(200).build();
   }
 }

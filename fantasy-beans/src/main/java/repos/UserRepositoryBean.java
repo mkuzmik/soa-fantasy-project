@@ -2,6 +2,7 @@ package repos;
 
 import entities.Role;
 import entities.User;
+import util.AuthUtil;
 
 import javax.ejb.EJBException;
 import javax.ejb.Remote;
@@ -20,6 +21,8 @@ public class UserRepositoryBean implements UserRepository {
 
   @Override
   public void save(User user) {
+    String encededPassword = AuthUtil.md5Encode(user.getPassword());
+    user.setPassword(encededPassword);
     entityManager.persist(user);
   }
 
@@ -65,8 +68,11 @@ public class UserRepositoryBean implements UserRepository {
     User reguestFrom = getById(requestFromUserId);
 
     if (!reguestFrom.getRole().equals(Role.ADMIN) && !(requestFromUserId == user.getId())) {
-      throw new EJBException("Not authorized to remove this user");
+      throw new EJBException("Not authorized to update this user");
     }
+
+    String encededPassword = AuthUtil.md5Encode(user.getPassword());
+    user.setPassword(encededPassword);
     entityManager.merge(user);
   }
 }
