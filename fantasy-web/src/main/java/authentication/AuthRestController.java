@@ -48,4 +48,10 @@ public class AuthRestController {
 
     return Response.ok().build();
   }
+
+  @GET
+  @Path("/test")
+  public Response test() {
+    return Response.ok().build();
+  }
 }
