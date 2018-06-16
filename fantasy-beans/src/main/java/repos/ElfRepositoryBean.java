@@ -32,6 +32,14 @@ public class ElfRepositoryBean implements ElfRepository {
   @Override
   public void save(Elf elf, int fromId) {
     authorize(fromId, elf.getForest().getId());
+
+    Integer maxArrows = (Integer) entityManager.createQuery("select max(e.arrows) from Elf e where e.forest.id = :forestId")
+      .setParameter("forestId", elf.getForest().getId())
+      .getSingleResult();
+
+    if (maxArrows != null && elf.getArrows() > maxArrows)
+      throw new EJBException("New elf cannot have the biggest amount of arrows in forest");
+
     entityManager.persist(elf);
   }
 
