@@ -12,6 +12,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -61,6 +62,14 @@ public class ElfRepositoryBean implements ElfRepository {
     authorize(fromId, elf.getForest().getId());
     entityManager.merge(elf);
   }
+
+  @Override
+  public List<Elf> getBest(int amount) {
+    return entityManager.createQuery("select e from Elf e order by e.arrows desc")
+      .setMaxResults(amount)
+      .getResultList();
+  }
+
 
   private void authorize(int fromId, int forestId) {
     Forest forest = forestRepository.getById(forestId);
