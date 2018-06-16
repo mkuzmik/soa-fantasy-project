@@ -15,4 +15,6 @@ public interface ElfRepository {
   void removeById(int id, int fromId);
 
   void update(Elf elf, int fromId);
+
+  List<Elf> getBest(int amount);
 }
