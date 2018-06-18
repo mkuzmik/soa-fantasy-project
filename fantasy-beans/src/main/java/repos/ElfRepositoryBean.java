@@ -12,6 +12,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -31,6 +32,14 @@ public class ElfRepositoryBean implements ElfRepository {
   @Override
   public void save(Elf elf, int fromId) {
     authorize(fromId, elf.getForest().getId());
+
+    Integer maxArrows = (Integer) entityManager.createQuery("select max(e.arrows) from Elf e where e.forest.id = :forestId")
+      .setParameter("forestId", elf.getForest().getId())
+      .getSingleResult();
+
+    if (maxArrows != null && elf.getArrows() > maxArrows)
+      throw new EJBException("New elf cannot have the biggest amount of arrows in forest");
+
     entityManager.persist(elf);
   }
 
@@ -61,6 +70,14 @@ public class ElfRepositoryBean implements ElfRepository {
     authorize(fromId, elf.getForest().getId());
     entityManager.merge(elf);
   }
+
+  @Override
+  public List<Elf> getBest(int amount) {
+    return entityManager.createQuery("select e from Elf e order by e.arrows desc")
+      .setMaxResults(amount)
+      .getResultList();
+  }
+
 
   private void authorize(int fromId, int forestId) {
     Forest forest = forestRepository.getById(forestId);

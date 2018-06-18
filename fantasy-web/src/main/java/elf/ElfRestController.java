@@ -7,6 +7,7 @@ import repos.ForestRepository;
 import request.RequestContext;
 
 import javax.ejb.EJB;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -24,7 +25,13 @@ public class ElfRestController {
   private ForestRepository forestRepository;
 
   @Inject
-  RequestContext requestContext;
+  private ElfHighscores elfHighscores;
+
+  @Inject
+  private RequestContext requestContext;
+
+  @Inject
+  private Event<ElfModificationEvent> elfModificationEvent;
 
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
@@ -37,13 +44,19 @@ public class ElfRestController {
 
     Elf elf = new Elf(input.getName(), input.getArrows(), input.getBowType(), input.getPowerType(), maybeForest.get());
     elfRepository.save(elf, requestContext.getUserId());
+    elfModificationEvent.fire(new ElfModificationEvent());
     return Response.status(201).build();
   }
 
   @GET
-  public Response getAll() {
-    List<Elf> elves = elfRepository.getAll();
-    return Response.ok(elves, MediaType.APPLICATION_JSON).build();
+  public Response getAll(@QueryParam("highScores") boolean highScores) {
+    if (highScores) {
+      List<Elf> elves = elfHighscores.getHighScores();
+      return Response.ok(elves, MediaType.APPLICATION_JSON).build();
+    } else {
+      List<Elf> elves = elfRepository.getAll();
+      return Response.ok(elves, MediaType.APPLICATION_JSON).build();
+    }
   }
 
   @GET
@@ -72,6 +85,7 @@ public class ElfRestController {
     toUpdate.setForest(newForest);
 
     elfRepository.update(toUpdate, requestContext.getUserId());
+    elfModificationEvent.fire(new ElfModificationEvent());
     return Response.ok().build();
   }
 
@@ -79,6 +93,7 @@ public class ElfRestController {
   @Path("/{id}")
   public Response delete(@PathParam("id") int id) {
     elfRepository.removeById(id, requestContext.getUserId());
+    elfModificationEvent.fire(new ElfModificationEvent());
     return Response.ok().build();
   }
 }

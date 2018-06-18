@@ -36,9 +36,9 @@ public class ForestRestController {
   }
   
   @GET
-  public Response getAll() {
-    List<Forest> forests = forestRepository.getAll();
-    return Response.ok(forests, MediaType.APPLICATION_JSON).build();
+  @Produces("application/xml,application/json")
+  public List<Forest> getAll() {
+    return forestRepository.getAll();
   }
 
   @GET
