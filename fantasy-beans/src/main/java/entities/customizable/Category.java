@@ -1,15 +1,16 @@
 package entities.customizable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Data
+@Setter
+@EqualsAndHashCode
 @NoArgsConstructor
 public class Category implements Serializable {
 
@@ -30,5 +31,36 @@ public class Category implements Serializable {
     this.name = name;
     this.fieldValue = fieldValue;
     this.categoryDefinition = categoryDefinition;
+  }
+
+  @Override
+  public String toString() {
+    return "Category{" +
+      "id=" + id +
+      ", name='" + name + '\'' +
+      ", fieldValue=" + fieldValue +
+      ", elements=" + elements +
+      '}';
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public int getFieldValue() {
+    return fieldValue;
+  }
+
+  @XmlTransient
+  public CategoryDefinition getCategoryDefinition() {
+    return categoryDefinition;
+  }
+
+  public List<Element> getElements() {
+    return elements;
   }
 }

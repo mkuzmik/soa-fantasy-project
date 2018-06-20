@@ -22,4 +22,9 @@ public class CategoryDefinitionServiceImpl implements CategoryDefinitionService 
   public List<CategoryDefinition> getAll() {
     return categoryDefinitionRepository.getAll();
   }
+
+  @Override
+  public String foo() {
+    return "bar";
+  }
 }

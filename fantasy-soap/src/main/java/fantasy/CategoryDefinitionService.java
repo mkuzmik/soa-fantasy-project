@@ -14,4 +14,7 @@ public interface CategoryDefinitionService {
 
   @WebMethod
   List<CategoryDefinition> getAll();
+
+  @WebMethod
+  String foo();
 }
