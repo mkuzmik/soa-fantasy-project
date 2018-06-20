@@ -1,6 +1,13 @@
 from zeep import Client
 
 client = Client('http://localhost:8080/soap/CategoryDefinitionService?wsdl')
-result = client.service.getAll()
 
-print(result)
+category = 'pythons'
+field = 'size'
+element = 'python'
+elem_field = 'length'
+enum1 = 'range'
+enum2 = 'whatever'
+
+client.service.create(category, field, element, elem_field, enum1, enum2)
+

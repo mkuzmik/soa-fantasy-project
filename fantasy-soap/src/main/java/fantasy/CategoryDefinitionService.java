@@ -10,7 +10,8 @@ import java.util.List;
 public interface CategoryDefinitionService {
 
   @WebMethod
-  void create(CategoryDefinition categoryDefinition);
+  void create(String name, String fieldName, String elementName, String elementFieldName, String elementEnum1Name,
+              String elementEnum2Name);
 
   @WebMethod
   List<CategoryDefinition> getAll();
