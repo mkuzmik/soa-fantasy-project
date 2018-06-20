@@ -23,6 +23,12 @@ public class Category implements Serializable {
   @JsonIgnore
   private CategoryDefinition categoryDefinition;
 
-  @OneToMany(mappedBy = "category")
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "category")
   private List<Element> elements;
+
+  public Category(String name, int fieldValue, CategoryDefinition categoryDefinition) {
+    this.name = name;
+    this.fieldValue = fieldValue;
+    this.categoryDefinition = categoryDefinition;
+  }
 }

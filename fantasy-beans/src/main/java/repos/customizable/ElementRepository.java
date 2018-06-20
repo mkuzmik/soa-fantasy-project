@@ -1,4 +1,7 @@
 package repos.customizable;
 
-public class ElementRepository {
+import entities.customizable.Element;
+
+public interface ElementRepository {
+  void save(Element element);
 }
