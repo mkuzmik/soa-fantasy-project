@@ -10,12 +10,15 @@ import java.util.List;
 public interface CategoryDefinitionService {
 
   @WebMethod
-  void create(String name, String fieldName, String elementName, String elementFieldName, String elementEnum1Name,
-              String elementEnum2Name);
+  void createCategoryDefinition(String name, String fieldName, String elementName, String elementFieldName, String elementEnum1Name,
+                                String elementEnum2Name);
 
   @WebMethod
-  List<CategoryDefinition> getAll();
+  List<CategoryDefinition> getAllCategoryDefinitions();
 
   @WebMethod
   String foo();
+
+  @WebMethod
+  void updateElement(int elementId, int newValue);
 }

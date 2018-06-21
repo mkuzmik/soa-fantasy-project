@@ -43,7 +43,7 @@ public class ElfCustomizableRepoBean implements ElfRepository {
     Category cat = categoryRepository.getById(elf.getForest().getId());
     Element element = new Element(elf.getName(), elf.getArrows(), elf.getBowType().toString(), elf.getPowerType().toString(),
       cat);
-    elementRepository.save(element);
+    elementRepository.save(element, fromId);
   }
 
   @Override
@@ -67,7 +67,7 @@ public class ElfCustomizableRepoBean implements ElfRepository {
 
   @Override
   public void removeById(int id, int fromId) {
-    elementRepository.removeById(id);
+    elementRepository.removeById(id, fromId);
   }
 
   @Override
@@ -77,12 +77,15 @@ public class ElfCustomizableRepoBean implements ElfRepository {
     element.setFieldValue(elf.getArrows());
     element.setEnum1Value(elf.getBowType().toString());
     element.setEnum2Value(elf.getPowerType().toString());
-    elementRepository.update(element);
+    elementRepository.update(element, fromId);
   }
 
   @Override
   public List<Elf> getBest(int amount) {
-    // TODO
-    return new ArrayList<>();
+    CategoryDefinition forestDef = init();
+    return elementRepository.getBestByCategoryDefId(forestDef.getId(), amount)
+      .stream()
+      .map(Element::toElf)
+      .collect(Collectors.toList());
   }
 }

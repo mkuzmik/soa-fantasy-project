@@ -52,8 +52,8 @@ public class ForestCustomizableRepoBean implements ForestRepository {
   @Override
   public void removeById(int id, int fromUserId) {
     Category cat = categoryRepository.getById(id);
-    cat.getElements().forEach(el -> elementRepository.removeById(el.getId()));
-    categoryRepository.removeById(id);
+    cat.getElements().forEach(el -> elementRepository.removeById(el.getId(), fromUserId));
+    categoryRepository.removeById(id, fromUserId);
   }
 
   @Override
@@ -61,6 +61,6 @@ public class ForestCustomizableRepoBean implements ForestRepository {
     Category cat = categoryRepository.getById(forest.getId());
     cat.setName(forest.getName());
     cat.setFieldValue(forest.getTrees());
-    categoryRepository.update(cat);
+    categoryRepository.update(cat, fromUserId);
   }
 }

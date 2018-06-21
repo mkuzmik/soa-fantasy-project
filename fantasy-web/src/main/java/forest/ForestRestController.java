@@ -9,10 +9,14 @@ import request.RequestContext;
 import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Path("/forests")
 public class ForestRestController {
@@ -37,8 +41,13 @@ public class ForestRestController {
   
   @GET
   @Produces("application/xml,application/json")
-  public List<Forest> getAll() {
-    return forestRepository.getAll();
+  public List<Forest> getAll(@Context HttpHeaders httpHeaders) {
+    // dummy content negotiation
+    if (httpHeaders.getAcceptableLanguages().contains(Locale.CHINESE)) {
+      return forestRepository.getAll().stream().peek(forest -> forest.setName("chinese forest")).collect(Collectors.toList());
+    } else {
+      return forestRepository.getAll();
+    }
   }
 
   @GET

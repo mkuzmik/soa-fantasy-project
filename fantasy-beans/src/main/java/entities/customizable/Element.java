@@ -17,7 +17,8 @@ import java.io.Serializable;
 public class Element implements Serializable {
 
   public static Elf toElf(Element element) {
-    return new Elf(element.getId(), element.getName(), element.getFieldValue(), BowType.valueOf(element.enum1Value), PowerType.valueOf(element.getEnum2Value()), null);
+    return new Elf(element.getId(), element.getName(), element.getFieldValue(), BowType.valueOf(element.enum1Value),
+      PowerType.valueOf(element.getEnum2Value()), Category.toForest(element.getCategory()));
   }
 
   @Id

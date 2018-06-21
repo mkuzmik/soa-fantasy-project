@@ -9,6 +9,6 @@ public interface CategoryRepository {
   Category getById(int id);
   List<Category> getByCatDefId(int id);
   List<Category> getAll();
-  void update(Category category);
-  void removeById(int id);
+  void update(Category category, int fromUserId);
+  void removeById(int id, int fromUserId);
 }

@@ -4,10 +4,15 @@ import entities.customizable.CategoryDefinition;
 import repos.customizable.CategoryDefinitionRepository;
 
 import javax.ejb.EJB;
+import javax.ejb.Local;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Path("/categoryDefinitions")
 public class CategoryDefinitionRestController {
@@ -27,8 +32,12 @@ public class CategoryDefinitionRestController {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public List<CategoryDefinition> getAll() {
-    return categoryDefinitionRepository.getAll();
+  public List<CategoryDefinition> getAll(@Context HttpHeaders httpHeaders) {
+    if (httpHeaders.getAcceptableLanguages().contains(Locale.CHINESE)) {
+      return categoryDefinitionRepository.getAll().stream().peek(cat -> cat.setName("CHINESE NAME")).collect(Collectors.toList());
+    } else {
+      return categoryDefinitionRepository.getAll();
+    }
   }
 
   @GET

@@ -1,7 +1,12 @@
 package repos.customizable;
 
+import entities.Role;
+import entities.User;
 import entities.customizable.Category;
+import repos.UserRepository;
 
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -11,6 +16,9 @@ import java.util.List;
 @Stateless
 @Remote(CategoryRepository.class)
 public class CategoryRepositoryBean implements CategoryRepository {
+
+  @EJB
+  UserRepository userRepository;
 
   @PersistenceContext(unitName = "postgresDb")
   private EntityManager entityManager;
@@ -37,13 +45,15 @@ public class CategoryRepositoryBean implements CategoryRepository {
   }
 
   @Override
-  public void update(Category category) {
+  public void update(Category category, int fromUserId) {
+    auth(category, fromUserId);
     entityManager.merge(category);
   }
 
   @Override
-  public void removeById(int id) {
+  public void removeById(int id, int fromUserId) {
     Category cat = getById(id);
+    auth(cat, fromUserId);
     entityManager.remove(cat);
   }
 
@@ -52,5 +62,12 @@ public class CategoryRepositoryBean implements CategoryRepository {
     return entityManager.createQuery("select e from Category e where e.categoryDefinition.id = :id")
       .setParameter("id", id)
       .getResultList();
+  }
+
+  private void auth(Category cat, int fromId) {
+    User usr = userRepository.getById(fromId);
+    if (usr.getRole() != Role.ADMIN && fromId != cat.getUser().getId()) {
+      throw new EJBException("Not authorized");
+    }
   }
 }
