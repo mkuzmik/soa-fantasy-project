@@ -48,6 +48,13 @@ public class Forest implements Serializable {
     this.user = user;
   }
 
+  public Forest(int id, String name, int trees, User user) {
+    this.id = id;
+    this.name = name;
+    this.trees = trees;
+    this.user = user;
+  }
+
   public int getId() {
     return id;
   }

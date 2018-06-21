@@ -1,6 +1,9 @@
 package entities.customizable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import entities.BowType;
+import entities.Elf;
+import entities.PowerType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,6 +15,10 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @NoArgsConstructor
 public class Element implements Serializable {
+
+  public static Elf toElf(Element element) {
+    return new Elf(element.getId(), element.getName(), element.getFieldValue(), BowType.valueOf(element.enum1Value), PowerType.valueOf(element.getEnum2Value()), null);
+  }
 
   @Id
   @GeneratedValue

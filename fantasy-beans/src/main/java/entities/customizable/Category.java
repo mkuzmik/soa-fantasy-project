@@ -1,6 +1,8 @@
 package entities.customizable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import entities.Forest;
+import entities.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,6 +15,10 @@ import java.util.List;
 @EqualsAndHashCode
 @NoArgsConstructor
 public class Category implements Serializable {
+
+  public static Forest toForest(Category category) {
+    return new Forest(category.getId(), category.getName(), category.getFieldValue(), category.getUser());
+  }
 
   @Id
   @GeneratedValue
@@ -27,7 +33,12 @@ public class Category implements Serializable {
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "category")
   private List<Element> elements;
 
-  public Category(String name, int fieldValue, CategoryDefinition categoryDefinition) {
+  @ManyToOne(optional = false)
+  @JsonIgnore
+  private User user;
+
+  public Category(String name, int fieldValue, CategoryDefinition categoryDefinition, User user) {
+    this.user = user;
     this.name = name;
     this.fieldValue = fieldValue;
     this.categoryDefinition = categoryDefinition;
@@ -53,6 +64,10 @@ public class Category implements Serializable {
 
   public int getFieldValue() {
     return fieldValue;
+  }
+
+  public User getUser() {
+    return user;
   }
 
   @XmlTransient
