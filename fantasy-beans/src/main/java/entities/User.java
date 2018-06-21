@@ -1,8 +1,11 @@
 package entities;
 
+import entities.customizable.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -31,8 +34,13 @@ public class User implements Serializable {
   @Enumerated(EnumType.STRING)
   private Role role;
 
-  @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+  @OneToMany(mappedBy = "user")
+  @LazyCollection(LazyCollectionOption.FALSE)
   private List<Forest> forests;
+
+  @OneToMany(mappedBy = "user")
+  @LazyCollection(LazyCollectionOption.FALSE)
+  private List<Category> categories;
 
   public User(String username, String password, Role role) {
     this.username = username;

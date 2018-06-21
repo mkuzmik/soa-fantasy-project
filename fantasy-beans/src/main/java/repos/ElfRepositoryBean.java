@@ -15,8 +15,8 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-@Stateless
-@Remote(ElfRepository.class)
+//@Stateless
+//@Remote(ElfRepository.class)
 @SuppressWarnings("unchecked")
 public class ElfRepositoryBean implements ElfRepository {
 

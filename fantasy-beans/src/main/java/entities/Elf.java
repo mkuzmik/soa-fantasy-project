@@ -56,6 +56,15 @@ public class Elf implements Serializable {
     this.forest = forest;
   }
 
+  public Elf(int id, String name, int arrows, BowType bowType, PowerType powerType, Forest forest) {
+    this.id = id;
+    this.name = name;
+    this.arrows = arrows;
+    this.bowType = bowType;
+    this.powerType = powerType;
+    this.forest = forest;
+  }
+
   public int getId() {
     return id;
   }

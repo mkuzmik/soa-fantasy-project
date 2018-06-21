@@ -13,9 +13,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-@Stateless
-@Remote(ForestRepository.class)
-@SuppressWarnings("unchecked")
+//@Stateless
+//@Remote(ForestRepository.class)
+//@SuppressWarnings("unchecked")
 public class ForestRepositoryBean implements ForestRepository{
 
   @PersistenceContext(unitName = "postgresDb")
