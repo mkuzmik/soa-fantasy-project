@@ -11,4 +11,4 @@ client = Client('http://localhost:8080/soap/CategoryDefinitionService?wsdl')
 #
 # client.service.create(category, field, element, elem_field, enum1, enum2)
 
-client.service.updateElement(50, 33)
+client.service.updateElement(56, 1000)

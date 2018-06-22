@@ -4,12 +4,14 @@ import entities.Role;
 import entities.User;
 import entities.customizable.Category;
 import entities.customizable.Element;
+import jms.MessageService;
 import repos.UserRepository;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
@@ -21,6 +23,9 @@ public class ElementRepositoryBean implements ElementRepository {
   @PersistenceContext(unitName = "postgresDb")
   private EntityManager entityManager;
 
+  @Inject
+  MessageService messageService;
+
   @EJB
   UserRepository userRepository;
 
@@ -28,6 +33,7 @@ public class ElementRepositoryBean implements ElementRepository {
   public void save(Element element, int fromUserId) {
     auth(element.getCategory(), fromUserId);
     entityManager.persist(element);
+    messageService.sendMessage("Element added: " + element.getName());
   }
 
   @Override

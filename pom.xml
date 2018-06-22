@@ -11,5 +11,6 @@
   <modules>
     <module>fantasy-beans</module>
     <module>fantasy-web</module>
+    <module>fantasy-soap</module>
   </modules>
 </project>
